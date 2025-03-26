@@ -4,7 +4,7 @@
 [/] Define Entities Classes
 [/] Create Repository Classes & Models
 [/] Make Request To API Using Retrofit
-[] Use Cases
+[/] Use Cases
 [] Create Bloc
 [] Dependency Injection
 [] Display News
