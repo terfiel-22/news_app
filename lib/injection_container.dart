@@ -6,7 +6,7 @@ import 'package:news_app/features/daily_news/domain/repository/article_repositor
 import 'package:news_app/features/daily_news/domain/usecases/get_article.dart';
 import 'package:news_app/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 
-final sl = GetIt.instance; // sl for singleton
+final sl = GetIt.instance; // sl for service locator
 
 Future<void> initializeDependencies() async {
   // Dio
