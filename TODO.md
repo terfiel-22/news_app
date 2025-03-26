@@ -5,7 +5,7 @@
 [/] Create Repository Classes & Models
 [/] Make Request To API Using Retrofit
 [/] Use Cases
-[] Create Bloc
+[/] Create Bloc
 [] Dependency Injection
 [] Display News
 [] Local Database
