@@ -6,7 +6,7 @@
 [/] Make Request To API Using Retrofit
 [/] Use Cases
 [/] Create Bloc
-[] Dependency Injection
+[/] Dependency Injection
 [] Display News
 [] Local Database
 [] Add Database Methods To Layers
