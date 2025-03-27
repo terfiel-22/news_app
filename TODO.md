@@ -7,7 +7,7 @@
 [/] Use Cases
 [/] Create Bloc
 [/] Dependency Injection
-[] Display News
+[/] Display News
 [] Local Database
 [] Add Database Methods To Layers
 [] Save & Remove Article From Database

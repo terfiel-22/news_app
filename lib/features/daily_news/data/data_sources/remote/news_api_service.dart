@@ -15,10 +15,9 @@ abstract class NewsApiService {
 
   // @GET('/top-headlines') → Sends a GET request to https://newsapi.org/v2/top-headlines
   @GET('/top-headlines')
-  Future<HttpResponse<List<ArticleModel>>> getNewsArticles({
-    // Uses @Query() parameters to pass API key, country, and category
-    @Query('apiKey') String? apiKey,
-    @Query('country') String? country,
-    @Query('category') String? category,
+  Future<HttpResponse<ArticleResponseModel>> getNewsArticles({
+    @Query("apiKey") String? apiKey,
+    @Query("country") String? country,
+    @Query("category") String? category,
   });
 }
