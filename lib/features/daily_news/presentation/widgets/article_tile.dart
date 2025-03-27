@@ -9,6 +9,8 @@ class ArticleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: () {},
       child: Card(
@@ -44,26 +46,21 @@ class ArticleTile extends StatelessWidget {
                   children: [
                     Text(
                       article.title ?? 'No Title',
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleSmall,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 5),
                     Text(
                       article.description ?? 'No Description',
-                      style:
-                          const TextStyle(fontSize: 14, color: Colors.black54),
+                      style: theme.textTheme.bodySmall,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 5),
                     Text(
                       'By ${article.author ?? 'Unknown'}',
-                      style: const TextStyle(
-                          fontSize: 12,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.blueGrey),
+                      style: theme.textTheme.labelSmall,
                     ),
                   ],
                 ),
