@@ -1,18 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:news_app/core/util/error_util.dart';
+import 'package:news_app/core/util/url_launcher_util.dart';
 import 'package:news_app/features/daily_news/domain/entities/article.dart';
 
-class ArticleTile extends StatelessWidget {
+class ArticleTile extends StatefulWidget {
   final ArticleEntity article;
 
   const ArticleTile({super.key, required this.article});
+
+  @override
+  State<ArticleTile> createState() => _ArticleTileState();
+}
+
+class _ArticleTileState extends State<ArticleTile> {
+  void _launchUrl() async {
+    bool isLaunchedUrl =
+        await UrlLauncherUtil.goToURL(link: widget.article.url!);
+    if (!isLaunchedUrl) {
+      if (mounted) {
+        displayError(context: context, message: 'Could not launched url.');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return GestureDetector(
-      onTap: () {},
+      onTap: _launchUrl,
       child: Card(
         elevation: 3,
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -26,7 +43,7 @@ class ArticleTile extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: CachedNetworkImage(
-                  imageUrl: article.urlToImage ?? '',
+                  imageUrl: widget.article.urlToImage ?? '',
                   width: 100,
                   height: 100,
                   fit: BoxFit.cover,
@@ -45,21 +62,21 @@ class ArticleTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      article.title ?? 'No Title',
+                      widget.article.title ?? 'No Title',
                       style: theme.textTheme.titleSmall,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      article.description ?? 'No Description',
+                      widget.article.description ?? 'No Description',
                       style: theme.textTheme.bodySmall,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      'By ${article.author ?? 'Unknown'}',
+                      'By ${widget.article.author ?? 'Unknown'}',
                       style: theme.textTheme.labelSmall,
                     ),
                   ],
