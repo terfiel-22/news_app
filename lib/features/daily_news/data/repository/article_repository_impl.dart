@@ -59,4 +59,11 @@ class ArticleRepositoryImpl implements ArticleRepository {
       ArticleModel.fromEntity(article),
     );
   }
+
+  @override
+  Future<ArticleModel?> getArticleByUrl(String url) {
+    return _appDatabase.articleDao.getArticleByUrl(
+      url,
+    );
+  }
 }

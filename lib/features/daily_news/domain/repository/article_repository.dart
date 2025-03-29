@@ -9,4 +9,5 @@ abstract class ArticleRepository {
   Future<List<ArticleEntity>> getSavedArticles();
   Future<void> saveArticle(ArticleEntity article);
   Future<void> removeArticle(ArticleEntity article);
+  Future<ArticleEntity?> getArticleByUrl(String url);
 }

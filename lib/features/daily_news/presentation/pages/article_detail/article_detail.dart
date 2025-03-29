@@ -7,6 +7,8 @@ import 'package:news_app/core/util/url_launcher_util.dart';
 import 'package:news_app/features/daily_news/domain/entities/article.dart';
 import 'package:news_app/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
+import 'package:news_app/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
+import 'package:news_app/injection_container.dart';
 
 class ArticleDetail extends StatefulWidget {
   final ArticleEntity article;
@@ -18,6 +20,8 @@ class ArticleDetail extends StatefulWidget {
 }
 
 class _ArticleDetailState extends State<ArticleDetail> {
+  bool isSavedArticle = false;
+
   void _launchUrl() async {
     bool isLaunchedUrl =
         await UrlLauncherUtil.goToURL(link: widget.article.url!);
@@ -31,103 +35,119 @@ class _ArticleDetailState extends State<ArticleDetail> {
 
   void _onSaveArticle() {
     BlocProvider.of<LocalArticleBloc>(context).add(SaveArticle(widget.article));
+    setState(() {
+      isSavedArticle = true;
+    });
     SnackbarUtil.displaySuccessMessage(
         context: context, message: 'Article saved successfully.');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Article Image
-            if (widget.article.urlToImage!.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: CachedNetworkImage(
-                  imageUrl: widget.article.urlToImage!,
-                  placeholder: (context, url) =>
-                      Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) =>
-                      Icon(Icons.broken_image, size: 100),
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-            const SizedBox(height: 16),
-
-            // Title
-            Text(
-              widget.article.title!,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 8),
-
-            // Author & Published Date
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    widget.article.author!.isNotEmpty
-                        ? "By ${widget.article.author}"
-                        : "Unknown Author",
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey[700]),
+    return BlocProvider<LocalArticleBloc>(
+      create: (context) => sl()..add(GetArticleByUrl(widget.article.url!)),
+      child: Scaffold(
+        appBar: AppBar(),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Article Image
+              if (widget.article.urlToImage!.isNotEmpty)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.article.urlToImage!,
+                    placeholder: (context, url) =>
+                        Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        Icon(Icons.broken_image, size: 100),
+                    width: double.infinity,
+                    height: 200,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(width: 30),
-                Text(
-                  DateFormatUtil.formatDate(widget.article.publishedAt!),
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                ),
-              ],
-            ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // Description
-            if (widget.article.description!.isNotEmpty)
+              // Title
               Text(
-                widget.article.description!,
+                widget.article.title!,
                 style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
 
-            const SizedBox(height: 12),
+              const SizedBox(height: 8),
 
-            // Content
-            if (widget.article.content!.isNotEmpty)
-              Text(
-                widget.article.content!,
-                style: const TextStyle(fontSize: 14, height: 1.5),
+              // Author & Published Date
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.article.author!.isNotEmpty
+                          ? "By ${widget.article.author}"
+                          : "Unknown Author",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey[700]),
+                    ),
+                  ),
+                  const SizedBox(width: 30),
+                  Text(
+                    DateFormatUtil.formatDate(widget.article.publishedAt!),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                  ),
+                ],
               ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
-            // Read More Button
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: () => _launchUrl(),
-                icon: const Icon(Icons.open_in_browser),
-                label: const Text("Read Full Article"),
+              // Description
+              if (widget.article.description!.isNotEmpty)
+                Text(
+                  widget.article.description!,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+
+              const SizedBox(height: 12),
+
+              // Content
+              if (widget.article.content!.isNotEmpty)
+                Text(
+                  widget.article.content!,
+                  style: const TextStyle(fontSize: 14, height: 1.5),
+                ),
+
+              const SizedBox(height: 20),
+
+              // Read More Button
+              Center(
+                child: ElevatedButton.icon(
+                  onPressed: () => _launchUrl(),
+                  icon: const Icon(Icons.open_in_browser),
+                  label: const Text("Read Full Article"),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _onSaveArticle,
-        child: Icon(Icons.bookmark),
+        floatingActionButton: BlocBuilder<LocalArticleBloc, LocalArticleState>(
+          builder: (context, state) {
+            if (state is LocalArticleDone) {
+              if (state.article == null && !isSavedArticle) {
+                return FloatingActionButton(
+                  onPressed: _onSaveArticle,
+                  child: Icon(Icons.bookmark),
+                );
+              }
+            }
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }

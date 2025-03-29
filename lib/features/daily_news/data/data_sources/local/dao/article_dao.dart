@@ -11,4 +11,7 @@ abstract class ArticleDao {
 
   @Query('SELECT * FROM articles')
   Future<List<ArticleModel>> getArticles();
+
+  @Query('SELECT * FROM articles WHERE url = :url')
+  Future<ArticleModel?> getArticleByUrl(String url);
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class SnackbarUtil {
   static void displayErrorMessage(
       {required BuildContext context, required String message}) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     final snackBar = SnackBar(
       content: Text(message),
       duration: Duration(seconds: 3),
@@ -13,6 +14,7 @@ class SnackbarUtil {
 
   static void displaySuccessMessage(
       {required BuildContext context, required String message}) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     final snackBar = SnackBar(
       backgroundColor: Colors.green[400],
       content: Text(message),
