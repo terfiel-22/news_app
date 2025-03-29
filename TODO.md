@@ -10,4 +10,4 @@
 [/] Display News
 [/] Local Database
 [/] Add Database Methods To Layers
-[] Save & Remove Article From Database
+[/] Save & Remove Article From Database

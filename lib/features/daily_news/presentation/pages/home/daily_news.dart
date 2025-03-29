@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:news_app/features/daily_news/presentation/bloc/article/remote/remote_article_event.dart';
 import 'package:news_app/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
+import 'package:news_app/features/daily_news/presentation/pages/saved_articles/saved_articles.dart';
 import 'package:news_app/features/daily_news/presentation/widgets/article_tile.dart';
 
 class DailyNews extends StatefulWidget {
@@ -17,6 +18,15 @@ class _DailyNewsState extends State<DailyNews> {
     context.read<RemoteArticleBloc>().add(const GetArticles());
   }
 
+  void _viewSavedArticles() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SavedArticles(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +38,14 @@ class _DailyNewsState extends State<DailyNews> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       title: Text('Daily News'),
+      actions: [
+        IconButton(
+          onPressed: _viewSavedArticles,
+          icon: Icon(
+            Icons.bookmark,
+          ),
+        ),
+      ],
     );
   }
 

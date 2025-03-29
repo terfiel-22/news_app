@@ -1,27 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:news_app/core/util/error_util.dart';
-import 'package:news_app/core/util/url_launcher_util.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/core/util/snackbar_util.dart';
 import 'package:news_app/features/daily_news/domain/entities/article.dart';
+import 'package:news_app/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
+import 'package:news_app/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
+import 'package:news_app/features/daily_news/presentation/pages/article_detail/article_detail.dart';
 
 class ArticleTile extends StatefulWidget {
   final ArticleEntity article;
+  final bool isRemovable;
 
-  const ArticleTile({super.key, required this.article});
+  const ArticleTile(
+      {super.key, required this.article, this.isRemovable = false});
 
   @override
   State<ArticleTile> createState() => _ArticleTileState();
 }
 
 class _ArticleTileState extends State<ArticleTile> {
-  void _launchUrl() async {
-    bool isLaunchedUrl =
-        await UrlLauncherUtil.goToURL(link: widget.article.url!);
-    if (!isLaunchedUrl) {
-      if (mounted) {
-        displayError(context: context, message: 'Could not launched url.');
-      }
-    }
+  void _viewArticle() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ArticleDetail(article: widget.article),
+      ),
+    );
+  }
+
+  void _onRemoveArticle() {
+    BlocProvider.of<LocalArticleBloc>(context)
+        .add(RemoveArticle(widget.article));
+
+    SnackbarUtil.displaySuccessMessage(
+        context: context, message: 'Article removed successfully.');
   }
 
   @override
@@ -29,7 +41,7 @@ class _ArticleTileState extends State<ArticleTile> {
     final theme = Theme.of(context);
 
     return GestureDetector(
-      onTap: _launchUrl,
+      onTap: _viewArticle,
       child: Card(
         elevation: 3,
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -82,10 +94,19 @@ class _ArticleTileState extends State<ArticleTile> {
                   ],
                 ),
               ),
+              widget.isRemovable ? _buildRemoveButton() : const SizedBox()
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildRemoveButton() {
+    return IconButton(
+      color: Colors.redAccent,
+      icon: Icon(Icons.remove_circle),
+      onPressed: _onRemoveArticle,
     );
   }
 }

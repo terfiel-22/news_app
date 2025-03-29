@@ -8,6 +8,7 @@ import 'package:news_app/features/daily_news/domain/usecases/get_article.dart';
 import 'package:news_app/features/daily_news/domain/usecases/get_saved_article.dart';
 import 'package:news_app/features/daily_news/domain/usecases/remove_article.dart';
 import 'package:news_app/features/daily_news/domain/usecases/save_article.dart';
+import 'package:news_app/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 
 final sl = GetIt.instance; // sl for service locator
@@ -33,4 +34,6 @@ Future<void> initializeDependencies() async {
 
   // Blocs
   sl.registerFactory<RemoteArticleBloc>(() => RemoteArticleBloc(sl()));
+  sl.registerFactory<LocalArticleBloc>(
+      () => LocalArticleBloc(sl(), sl(), sl()));
 }
