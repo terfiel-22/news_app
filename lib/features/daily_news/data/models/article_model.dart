@@ -1,3 +1,4 @@
+import 'package:floor/floor.dart';
 import 'package:news_app/features/daily_news/domain/entities/article.dart';
 
 class ArticleResponseModel {
@@ -17,6 +18,7 @@ class ArticleResponseModel {
   }
 }
 
+@Entity(tableName: 'articles', primaryKeys: ['id'])
 class ArticleModel extends ArticleEntity {
   const ArticleModel({
     super.id,

@@ -8,6 +8,6 @@
 [/] Create Bloc
 [/] Dependency Injection
 [/] Display News
-[] Local Database
+[/] Local Database
 [] Add Database Methods To Layers
 [] Save & Remove Article From Database
